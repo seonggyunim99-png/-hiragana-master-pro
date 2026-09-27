@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="히라가나 PRO">
+<title>히라가나 PRO</title><link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#18202a;--muted:#6b7280;--line:#e5e7eb;--accent:#4f46e5;--accent2:#7c3aed;--good:#16a34a;--bad:#dc2626}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif}
+button,input{font:inherit} button{border:0;cursor:pointer}.app{max-width:900px;margin:auto;min-height:100vh;padding:18px 16px 90px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.logo{font-weight:900;font-size:24px}.logo span{color:var(--accent)}
+.iconbtn{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 13px}
+.screen{display:none}.screen.active{display:block}.hero{background:linear-gradient(135deg,#111827,#3730a3);color:white;border-radius:26px;padding:24px;margin-bottom:16px}
+.hero h1{margin:0 0 7px;font-size:29px}.hero p{margin:0;color:#dbeafe}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 3px 12px #00000008}
+.action{width:100%;text-align:left;min-height:105px}.action b{display:block;font-size:19px;margin-bottom:5px}.action small{color:var(--muted)}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}.stat{background:var(--card);border-radius:17px;padding:13px;text-align:center;border:1px solid var(--line)}.stat b{display:block;font-size:21px}.stat span{font-size:12px;color:var(--muted)}
+.sectiontitle{font-size:18px;font-weight:800;margin:24px 0 10px}
+.pills{display:flex;gap:8px;overflow:auto;padding-bottom:5px}.pill{white-space:nowrap;padding:10px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line)}.pill.on{background:#eef2ff;border-color:#818cf8;color:#3730a3;font-weight:800}
+.primary{background:var(--accent);color:white;border-radius:15px;padding:14px 18px;font-weight:800}.secondary{background:#eef2ff;color:#3730a3;border-radius:15px;padding:14px 18px;font-weight:800}.danger{background:#fef2f2;color:#b91c1c;border-radius:15px;padding:12px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.back{background:transparent;color:var(--muted);padding:7px 0;margin-bottom:8px}
+.quiztop{display:flex;justify-content:space-between;color:var(--muted);font-size:14px}.progress{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:10px 0 25px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0}
+.question{background:var(--card);border-radius:25px;text-align:center;padding:28px 15px;margin-bottom:14px}.kana{font-size:86px;font-weight:800;line-height:1.1}.hint{color:var(--muted);margin-top:8px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.choice{background:var(--card);border:2px solid var(--line);border-radius:17px;padding:18px;font-size:22px;font-weight:800;min-height:68px}.choice.good{border-color:#22c55e;background:#f0fdf4}.choice.bad{border-color:#ef4444;background:#fef2f2}
+.feedback{text-align:center;min-height:40px;padding:10px;font-weight:800}.keyboard{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.key{padding:13px;background:var(--card);border:1px solid var(--line);border-radius:13px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:18px;overflow:hidden}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left}th{font-size:13px;color:var(--muted)}
+.empty{text-align:center;padding:35px;color:var(--muted)}.bar{height:12px;background:#e5e7eb;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);width:0}
+.toggle{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.switch{width:48px;height:28px;background:#d1d5db;border-radius:99px;padding:3px}.switch i{display:block;width:22px;height:22px;background:#fff;border-radius:50%;transition:.2s}.switch.on{background:var(--accent)}.switch.on i{transform:translateX(20px)}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.action{min-height:125px}}
+</style></head>
+<body><div class="app">
+<header><div class="logo">히라가나 <span>PRO</span></div><button class="iconbtn" onclick="show('settings')">⚙️</button></header>
+
+<section id="home" class="screen active">
+<div class="hero"><h1>오늘도 10분 일본어 🇯🇵</h1><p>읽기 → 입력 → 듣기 → 복습까지 한 번에.</p></div>
+<div class="statrow"><div class="stat"><b id="streak">0</b><span>연속 정답</span></div><div class="stat"><b id="mastered">0%</b><span>전체 숙련도</span></div><div class="stat"><b id="today">0</b><span>오늘 문제</span></div><div class="stat"><b id="mistakes">0</b><span>오답</span></div></div>
+<div class="grid">
+<button class="card action" onclick="setup('quick')"><b>⚡ 빠른 10문제</b><small>가볍게 매일 연습</small></button>
+<button class="card action" onclick="setup('exam')"><b>📝 실전 시험</b><small>시간 제한 + 점수</small></button>
+<button class="card action" onclick="setup('write')"><b>⌨️ 직접 입력</b><small>로마자 없이 떠올리기</small></button>
+<button class="card action" onclick="setup('reverse')"><b>🔄 거꾸로 암기</b><small>로마자 → 히라가나</small></button>
+<button class="card action" onclick="setup('listen')"><b>🔊 발음 훈련</b><small>소리를 듣고 맞히기</small></button>
+<button class="card action" onclick="setup('survival')"><b>🔥 서바이벌</b><small>틀릴 때까지 계속</small></button>
+</div>
+<div class="sectiontitle">📚 학습</div>
+<div class="grid">
+<button class="card action" onclick="study()"><b>📖 전체 표 보기</b><small>청음·탁음·반탁음·요음</small></button>
+<button class="card action" onclick="review()"><b>❌ 오답 복습</b><small>틀린 문제만 집중</small></button>
+<button class="card action" onclick="stats()"><b>📊 학습 통계</b><small>정답률과 취약 문자</small></button>
+</div>
+</section>
+
+<section id="setup" class="screen">
+<button class="back" onclick="show('home')">← 홈</button><h2>문제 설정</h2>
+<div class="card"><div class="sectiontitle">범위</div><div id="cats" class="pills"></div>
+<div class="sectiontitle">문제 수</div><div class="pills" id="counts"></div>
+<div class="sectiontitle">출제 방향</div><div class="pills" id="dirs"></div>
+<br><button class="primary" style="width:100%" onclick="startQuiz()">학습 시작</button></div>
+</section>
+
+<section id="quiz" class="screen">
+<div class="quiztop"><span id="qnum"></span><span id="qscore"></span></div><div class="progress"><i id="prog"></i></div>
+<div class="question"><div id="qkana" class="kana">あ</div><div id="qhint" class="hint"></div></div>
+<div id="choices" class="choices"></div><div id="feedback" class="feedback"></div>
+<div id="writebox" style="display:none"><input id="answer" autocomplete="off" placeholder="로마자로 입력 (예: shi)" style="width:100%;padding:16px;border:2px solid var(--line);border-radius:15px"><button class="primary" style="width:100%;margin-top:9px" onclick="submitWrite()">제출</button></div>
+<button id="next" class="primary" style="display:none;width:100%" onclick="nextQ()">다음 문제 →</button>
+</section>
+
+<section id="result" class="screen">
+<div class="hero"><h1>학습 완료 🎉</h1><p id="resultMsg"></p></div>
+<div class="statrow"><div class="stat"><b id="rScore"></b><span>점수</span></div><div class="stat"><b id="rAcc"></b><span>정답률</span></div><div class="stat"><b id="rTime"></b><span>시간</span></div><div class="stat"><b id="rCombo"></b><span>최고 콤보</span></div></div>
+<div class="card"><h3>틀린 문자</h3><div id="resultMistakes"></div></div><br><button class="primary" style="width:100%" onclick="show('home');refresh()">홈으로</button>
+</section>
+
+<section id="study" class="screen"><button class="back" onclick="show('home')">← 홈</button><h2>📖 히라가나 표</h2><div id="studyTable"></div></section>
+<section id="review" class="screen"><button class="back" onclick="show('home')">← 홈</button><h2>❌ 오답 복습</h2><div id="reviewList"></div><br><button class="primary" style="width:100%" onclick="setupReview()">오답만 퀴즈</button></section>
+<section id="stats" class="screen"><button class="back" onclick="show('home')">← 홈</button><h2>📊 학습 통계</h2><div id="statsBox"></div></section>
+<section id="settings" class="screen"><button class="back" onclick="show('home')">← 홈</button><h2>⚙️ 설정</h2><div class="card">
+<div class="toggle"><span>🔊 정답/오답 효과음</span><button class="switch" id="soundToggle" onclick="toggleSound()"><i></i></button></div>
+<div class="toggle"><span>🔤 로마자 힌트</span><button class="switch on" id="hintToggle" onclick="toggleHint()"><i></i></button></div>
+<div class="toggle"><span>🌙 다크 모드</span><button class="switch" id="darkToggle" onclick="toggleDark()"><i></i></button></div>
+<br><button class="danger" onclick="resetAll()">⚠️ 학습 데이터 초기화</button></div></section>
+</div>
+
+<script>
+const DATA = {"청음": [["あ", "a"], ["い", "i"], ["う", "u"], ["え", "e"], ["お", "o"], ["か", "ka"], ["き", "ki"], ["く", "ku"], ["け", "ke"], ["こ", "ko"], ["さ", "sa"], ["し", "shi"], ["す", "su"], ["せ", "se"], ["そ", "so"], ["た", "ta"], ["ち", "chi"], ["つ", "tsu"], ["て", "te"], ["と", "to"], ["な", "na"], ["に", "ni"], ["ぬ", "nu"], ["ね", "ne"], ["の", "no"], ["は", "ha"], ["ひ", "hi"], ["ふ", "fu"], ["へ", "he"], ["ほ", "ho"], ["ま", "ma"], ["み", "mi"], ["む", "mu"], ["め", "me"], ["も", "mo"], ["や", "ya"], ["ゆ", "yu"], ["よ", "yo"], ["ら", "ra"], ["り", "ri"], ["る", "ru"], ["れ", "re"], ["ろ", "ro"], ["わ", "wa"], ["を", "wo"], ["ん", "n"]], "탁음": [["が", "ga"], ["ぎ", "gi"], ["ぐ", "gu"], ["げ", "ge"], ["ご", "go"], ["ざ", "za"], ["じ", "ji"], ["ず", "zu"], ["ぜ", "ze"], ["ぞ", "zo"], ["だ", "da"], ["ぢ", "ji"], ["づ", "zu"], ["で", "de"], ["ど", "do"], ["ば", "ba"], ["び", "bi"], ["ぶ", "bu"], ["べ", "be"], ["ぼ", "bo"]], "반탁음": [["ぱ", "pa"], ["ぴ", "pi"], ["ぷ", "pu"], ["ぺ", "pe"], ["ぽ", "po"]], "요음": [["きゃ", "kya"], ["きゅ", "kyu"], ["きょ", "kyo"], ["しゃ", "sha"], ["しゅ", "shu"], ["しょ", "sho"], ["ちゃ", "cha"], ["ちゅ", "chu"], ["ちょ", "cho"], ["にゃ", "nya"], ["にゅ", "nyu"], ["にょ", "nyo"], ["ひゃ", "hya"], ["ひゅ", "hyu"], ["ひょ", "hyo"], ["みゃ", "mya"], ["みゅ", "myu"], ["みょ", "myo"], ["りゃ", "rya"], ["りゅ", "ryu"], ["りょ", "ryo"], ["ぎゃ", "gya"], ["ぎゅ", "gyu"], ["ぎょ", "gyo"], ["じゃ", "ja"], ["じゅ", "ju"], ["じょ", "jo"], ["びゃ", "bya"], ["びゅ", "byu"], ["びょ", "byo"], ["ぴゃ", "pya"], ["ぴゅ", "pyu"], ["ぴょ", "pyo"]]};
+let state=JSON.parse(localStorage.getItem('hiraPro')||'null')||{stats:{},mistakes:{},today:0,day:new Date().toDateString(),bestCombo:0};
+let settings=JSON.parse(localStorage.getItem('hiraSet')||'null')||{sound:true,hint:true,dark:false};
+let mode='quick',cat='전체',count=10,dir='jp2romaji',qs=[],qi=0,score=0,combo=0,best=0,start=0,answered=false;
+
+const all=Object.entries(DATA).flatMap(([cat,a])=>a.map(([jp,ro])=>({jp,ro,cat})));
+function save(){localStorage.setItem('hiraPro',JSON.stringify(state));localStorage.setItem('hiraSet',JSON.stringify(settings));}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function refresh(){
+ if(state.day!==new Date().toDateString()){state.today=0;state.day=new Date().toDateString()}
+ document.getElementById('today').textContent=state.today||0;
+ document.getElementById('mistakes').textContent=Object.keys(state.mistakes).length;
+ let total=all.length, mastered=all.filter(x=>(state.stats[x.jp]?.correct||0)>=3 && (state.stats[x.jp]?.correct||0)>(state.stats[x.jp]?.wrong||0)).length;
+ document.getElementById('mastered').textContent=Math.round(mastered/total*100)+'%';
+ document.getElementById('streak').textContent=state.bestCombo||0;
+}
+function setup(m){mode=m;show('setup');renderSetup();}
+function renderSetup(){
+ let cs=['전체',...Object.keys(DATA)];document.getElementById('cats').innerHTML=cs.map(x=>`<button class="pill ${x===cat?'on':''}" onclick="cat='${x}';renderSetup()">${x}</button>`).join('');
+ document.getElementById('counts').innerHTML=[10,20,30,50].map(x=>`<button class="pill ${x===count?'on':''}" onclick="count=${x};renderSetup()">${x}문제</button>`).join('');
+ document.getElementById('dirs').innerHTML=[['jp2romaji','히라가나 → 로마자'],['reverse','로마자 → 히라가나']].map(([v,t])=>`<button class="pill ${v===dir?'on':''}" onclick="dir='${v}';renderSetup()">${t}</button>`).join('');
+}
+function pool(){return (cat==='전체'?all:all.filter(x=>x.cat===cat));}
+function setupReview(){mode='review';cat='전체';count=Math.max(10,Math.min(50,Object.keys(state.mistakes).length));dir='jp2romaji';startQuiz();}
+function startQuiz(){
+ let p=mode==='review'?all.filter(x=>state.mistakes[x.jp]):pool();
+ if(!p.length){alert('오답이 없습니다!');return}
+ qs=[];let n=mode==='survival'?Math.min(100,p.length):Math.min(count,p.length);
+ while(qs.length<n){let x=p[Math.floor(Math.random()*p.length)];if(!qs.some(y=>y.jp===x.jp)||p.length<n)qs.push(x)}
+ qi=0;score=0;combo=0;best=0;start=Date.now();show('quiz');renderQ();
+}
+function renderQ(){
+ answered=false;let x=qs[qi];document.getElementById('qnum').textContent=`${qi+1} / ${qs.length}`;document.getElementById('qscore').textContent=`${score}점 · 🔥 ${combo}`;
+ document.getElementById('prog').style.width=((qi)/qs.length*100)+'%';
+ let reverse=dir==='reverse';document.getElementById('qkana').textContent=reverse?x.ro:x.jp;
+ document.getElementById('qhint').textContent=reverse?'이 발음의 히라가나는?':(settings.hint?`발음: ${x.ro}`:'');
+ document.getElementById('feedback').textContent='';
+ document.getElementById('next').style.display='none';
+ if(mode==='write'){
+   document.getElementById('choices').style.display='none';document.getElementById('writebox').style.display='block';document.getElementById('answer').value='';setTimeout(()=>document.getElementById('answer').focus(),50);
+ }else{
+   document.getElementById('choices').style.display='grid';document.getElementById('writebox').style.display='none';
+   let opts=[x];let p=pool();while(opts.length<4){let y=p[Math.floor(Math.random()*p.length)];if(!opts.some(z=>z.jp===y.jp))opts.push(y)}
+   opts.sort(()=>Math.random()-.5);
+   document.getElementById('choices').innerHTML=opts.map(o=>`<button class="choice" onclick="answer('${o.jp.replaceAll("'","&#39;")}')">${reverse?o.jp:o.ro}</button>`).join('');
+   if(mode==='listen'){speak(x.ro)}
+ }
+}
+function answer(jp){if(answered)return;answered=true;let x=qs[qi],ok=jp===x.jp;finishAnswer(ok,x);}
+function submitWrite(){if(answered)return;let x=qs[qi],v=document.getElementById('answer').value.trim().toLowerCase();let ok=v===x.ro;answered=true;finishAnswer(ok,x)}
+function finishAnswer(ok,x){
+ let s=state.stats[x.jp]||{correct:0,wrong:0};s[ok?'correct':'wrong']++;state.stats[x.jp]=s;
+ if(ok){score+=10+combo*2;combo++;best=Math.max(best,combo);state.bestCombo=Math.max(state.bestCombo,best);document.getElementById('feedback').textContent='⭕ 정답!';document.getElementById('feedback').style.color='var(--good)'}
+ else{combo=0;state.mistakes[x.jp]={jp:x.jp,ro:x.ro,cat:x.cat};document.getElementById('feedback').textContent=`❌ 오답 · 정답: ${x.ro}`;document.getElementById('feedback').style.color='var(--bad)';}
+ state.today=(state.today||0)+1;save();refresh();
+ if(settings.sound){try{new Audio(ok?'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=':'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=').play()}catch(e){}}
+ document.querySelectorAll('.choice').forEach(b=>{if(b.textContent.trim()===(dir==='reverse'?x.jp:x.ro))b.classList.add(ok?'good':'bad')});
+ document.getElementById('next').style.display='block';
+ if(mode==='survival'&&!ok)document.getElementById('next').textContent='결과 보기';
+}
+function nextQ(){qi++;if(qi>=qs.length||(mode==='survival'&&combo===0&&qi>0)){finishQuiz();}else renderQ()}
+function finishQuiz(){
+ let sec=Math.round((Date.now()-start)/1000),acc=Math.round(score/Math.max(1,qs.length)/10*100);
+ document.getElementById('rScore').textContent=score;document.getElementById('rAcc').textContent=Math.min(100,acc)+'%';document.getElementById('rTime').textContent=sec+'초';document.getElementById('rCombo').textContent=best;
+ let wrong=qs.filter(x=>(state.stats[x.jp]?.wrong||0)>0);document.getElementById('resultMistakes').innerHTML=wrong.length?wrong.map(x=>`<div class="toggle"><span>${x.jp} — ${x.ro}</span><span>${x.cat}</span></div>`).join(''):'<div class="empty">완벽해! 🎉</div>';
+ document.getElementById('resultMsg').textContent=`${qs.length}문제를 끝냈어. ${wrong.length?'틀린 문자는 복습 목록에 저장했어.':'모든 문제를 맞혔어!'}`;
+ show('result');
+}
+function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.75;speechSynthesis.speak(u)}}
+function study(){
+ let html='<div class="card"><div class="pills">'+Object.keys(DATA).map(c=>`<span class="pill on">${c} ${DATA[c].length}</span>`).join('')+'</div></div><br>';
+ for(let [c,a] of Object.entries(DATA)){html+=`<div class="sectiontitle">${c}</div><table><tr><th>히라가나</th><th>로마자</th><th>연습</th></tr>${a.map(x=>`<tr><td style="font-size:28px">${x[0]}</td><td>${x[1]}</td><td><button class="secondary" onclick="speak('${x[1]}')">🔊</button></td></tr>`).join('')}</table><br>`}
+ document.getElementById('studyTable').innerHTML=html;show('study');
+}
+function review(){
+ let a=Object.values(state.mistakes);document.getElementById('reviewList').innerHTML=a.length?`<table><tr><th>문자</th><th>발음</th><th>분류</th><th></th></tr>${a.map(x=>`<tr><td style="font-size:26px">${x.jp}</td><td>${x.ro}</td><td>${x.cat}</td><td><button class="secondary" onclick="speak('${x.ro}')">🔊</button></td></tr>`).join('')}</table>`:'<div class="card empty">현재 오답이 없어! 아주 잘하고 있어.</div>';show('review');
+}
+function stats(){
+ let rows=all.map(x=>{let s=state.stats[x.jp]||{correct:0,wrong:0};let total=s.correct+s.wrong;return {...x,...s,total,acc:total?Math.round(s.correct/total*100):0}}).filter(x=>x.total).sort((a,b)=>a.acc-b.acc);
+ document.getElementById('statsBox').innerHTML=`<div class="card"><h3>취약 문자 TOP 10</h3>${rows.slice(0,10).map(x=>`<div style="margin:14px 0"><div class="row" style="justify-content:space-between"><b style="font-size:24px">${x.jp}</b><span>${x.ro} · ${x.acc}% (${x.correct}/${x.total})</span></div><div class="bar"><i style="width:${x.acc}%"></i></div></div>`).join('')||'<div class="empty">아직 학습 기록이 없어.</div>'}</div>`;
+ show('stats');
+}
+function toggleSound(){settings.sound=!settings.sound;save();document.getElementById('soundToggle').classList.toggle('on',settings.sound)}
+function toggleHint(){settings.hint=!settings.hint;save();document.getElementById('hintToggle').classList.toggle('on',settings.hint)}
+function toggleDark(){settings.dark=!settings.dark;document.getElementById('darkToggle').classList.toggle('on',settings.dark);document.body.style.background=settings.dark?'#0f172a':'var(--bg)';document.body.style.color=settings.dark?'#f8fafc':'var(--text)';save()}
+function resetAll(){if(confirm('모든 학습 기록을 삭제할까?')){localStorage.removeItem('hiraPro');state={stats:{},mistakes:{},today:0,day:new Date().toDateString(),bestCombo:0};save();refresh();alert('초기화 완료!')}}
+document.getElementById('answer').addEventListener('keydown',e=>{if(e.key==='Enter')submitWrite()});
+refresh();toggleDark();toggleDark();
+</script></body></html>
